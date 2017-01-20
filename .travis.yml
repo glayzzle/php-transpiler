@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+  - '0.12'
+cache:
+  bundler: true
+  directories:
+  - node_modules # NPM package
+notifications:
+  email: false
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/f1d48355795bf25a8f9a
+    on_success: change
+    on_failure: always
+    on_start: never
+script: npm run cover
+after_success: cat /home/travis/build/glayzzle/php-transpiler/coverage/lcov.info | /home/travis/build/glayzzle/php-transpiler/node_modules/coveralls/bin/coveralls.js
