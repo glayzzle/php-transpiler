@@ -1,7 +1,7 @@
 {
   "name": "php-transpiler",
-  "version": "0.0.1",
-  "description": "Transpiler API to convert php-parser AST to Javascript",
+  "version": "0.0.3",
+  "description": ":cactus: Transpiler API to convert php-parser AST to Javascript",
   "main": "src/index.js",
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha test --stack-size=5000",
