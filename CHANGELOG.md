@@ -24,7 +24,7 @@
 
 [...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.0.2...v0.0.3)
 
-## [Version 0.0.3](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.2) (2017-1-21)
+## [Version 0.0.2](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.2) (2017-1-21)
 
 ### Minor Changes
 
