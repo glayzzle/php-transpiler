@@ -8,7 +8,13 @@
 var AST = require('./ast');
 var State = require('./state');
 var Visitors = {
-  'program': require('./visitor/program')
+  'program': require('./visitor/program'),
+  'namespace': require('./visitor/namespace'),
+  'echo': require('./visitor/echo'),
+  'print': require('./visitor/echo'),
+  'string': require('./visitor/primitive'),
+  'integer': require('./visitor/primitive'),
+  'boolean': require('./visitor/primitive')
 };
 
 /**
@@ -46,6 +52,10 @@ Transpiler.prototype.visit = function (node, state, output) {
 
 // registers Javascript serializers
 AST.register('program', require('./ast/program'));
+AST.register('namespace', require('./ast/namespace'));
+AST.register('primitive', require('./ast/primitive'));
+AST.register('statement', require('./ast/statement'));
+AST.register('call', require('./ast/call'));
 
 // exports
 module.exports = Transpiler;
