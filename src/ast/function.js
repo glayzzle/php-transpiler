@@ -10,7 +10,7 @@ var AST = require('../ast');
 /**
  * @constructor AST/Function
  */
-var Function = AST.extends(function(parent, node) {
+var fn = AST.extends(function(parent, node) {
   AST.apply(this, [parent]);
   this.node = node;
 });
@@ -19,7 +19,7 @@ var Function = AST.extends(function(parent, node) {
  * Checks the argument typing
  * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
  */
-Function.prototype.checkArgumentType = function (nullable, name, type, indent, errTrigger) {
+fn.prototype.checkArgumentType = function (nullable, name, type, indent, errTrigger) {
   var checks = [];
   if (nullable) {
     checks.push(indent + 'if(' + name + ' != null) {\n');
@@ -55,7 +55,7 @@ Function.prototype.checkArgumentType = function (nullable, name, type, indent, e
 /**
  * Outputs the program
  */
-Function.prototype.toString = function (indent) {
+fn.prototype.toString = function (indent) {
   var buffer;
   var name = this.node.name;
   if (this.node.kind === 'closure') {
@@ -154,4 +154,4 @@ Function.prototype.toString = function (indent) {
   return buffer;
 };
 
-module.exports = Function;
+module.exports = fn;
