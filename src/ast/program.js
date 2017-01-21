@@ -17,10 +17,10 @@ var Program = AST.extends(function(parent) {
 /**
  * Outputs the program
  */
-Program.prototype.toString = function () {
+Program.prototype.toString = function (indent) {
   var buffer = '/** GLAYZZLE TRANSPILER @ ' + (new Date()).toString() + ' **/\n';
   buffer += 'module.exports = function($php) {\n';
-  buffer += AST.prototype.toString.apply(this, []);
+  buffer += AST.prototype.toString.apply(this, [indent + '  ']);
   buffer += '};\n';
   return buffer;
 };
