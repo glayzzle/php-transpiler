@@ -18,17 +18,25 @@ var Program = AST.extends(function(parent) {
  * Outputs the program
  */
 Program.prototype.toString = function (indent) {
-  var buffer = '/**' +
-    '\n * GLAYZZLE GENERATED FILE' +
-    '\n * @date ' + (new Date()).toString() +
-    '\n * @see https://github.com/glayzzle/php-transpiler' +
-    '\n */\n'
-  ;
-  buffer += 'module.exports = function($php) {\n';
-  indent += '  ';
+  var buffer;
+  var isModule = this.transpiler().mode === 'module';
+  if (isModule) {
+    buffer = '/**' +
+      '\n * GLAYZZLE GENERATED FILE' +
+      '\n * @date ' + (new Date()).toString() +
+      '\n * @see https://github.com/glayzzle/php-transpiler' +
+      '\n */\n'
+    ;
+    buffer += 'module.exports = function($php) {\n';
+    indent += '  ';
+  } else {
+    buffer = '';
+  }
   buffer += this.variablesToString(indent);
   buffer += AST.prototype.toString.apply(this, [indent]);
-  buffer += '};\n';
+  if (isModule) {
+    buffer += '};\n';
+  }
   return buffer;
 };
 
