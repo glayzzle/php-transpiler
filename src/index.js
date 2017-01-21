@@ -16,8 +16,11 @@ var Visitors = {
   'echo': require('./visitor/echo'),
   'print': require('./visitor/echo'),
   'string': require('./visitor/primitive'),
-  'integer': require('./visitor/primitive'),
-  'boolean': require('./visitor/primitive')
+  'number': require('./visitor/primitive'),
+  'boolean': require('./visitor/primitive'),
+  'assign': require('./visitor/assign'),
+  'variable': require('./visitor/variable'),
+  'bin': require('./visitor/bin')
 };
 
 /**
@@ -68,6 +71,8 @@ Transpiler.prototype.visit = function (node, state, output) {
     var fn = node.kind in this.visitors ? this.visitors[node.kind] : Visitors[node.kind];
     if (typeof fn === 'function') {
       fn.apply(this, [node, state, output]);
+    } else {
+      throw new Error('Node ' + node.kind + ' is not yet supported');
     }
   }
 };
@@ -78,6 +83,9 @@ AST.register('namespace', require('./ast/namespace'));
 AST.register('primitive', require('./ast/primitive'));
 AST.register('statement', require('./ast/statement'));
 AST.register('call', require('./ast/call'));
+AST.register('assign', require('./ast/assign'));
+AST.register('variable', require('./ast/variable'));
+AST.register('bin', require('./ast/bin'));
 
 // exports
 module.exports = Transpiler;
