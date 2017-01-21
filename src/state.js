@@ -5,20 +5,50 @@
  */
 'use strict';
 
+// the scope class
+var Scope = require('./scope');
+
 /**
  * Current parsing state
  * @constructor State
  */
-var State = function() {
+var State = function () {
   this.namespace = '';
   this.uses = {};
+  this.scopes = [];
+};
+
+/**
+ * Initialize a new scope
+ * @return Scope
+ */
+State.prototype.addScope = function (node) {
+  var scope = new Scope(node);
+  this.scopes.push(scope);
+  return scope;
+};
+
+/**
+ * Removes the current scope
+ * @return Scope
+ */
+State.prototype.popScope = function () {
+  return this.scopes.pop();
+};
+
+/**
+ * Gets the current scope
+ * @return Scope
+ */
+State.prototype.scope = function () {
+  return this.scopes[this.scopes.length - 1];
 };
 
 /**
  * Resolves a name
  * @see http://php.net/manual/en/language.namespaces.rules.php
  */
-State.prototype.resolve = function(identifier) {
+State.prototype.resolve = function (identifier) {
   if (identifier.resolution === 'rn') {
     // Relative names always resolve to the name with namespace replaced
     // by the current namespace. If the name occurs in the global namespace,
