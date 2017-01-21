@@ -12,14 +12,14 @@ var AST = require('../ast');
  */
 var Namespace = AST.extends(function(parent, name) {
   AST.apply(this, [parent]);
-  this.name = name || '';
+  this.name = name;
 });
 
 /**
  * Outputs the program
  */
 Namespace.prototype.toString = function (indent) {
-  var buffer = indent + '$php.namespace("' + this.name + '", function($php) {\n';
+  var buffer = indent + '$php.namespace(\'' + this.name.replace(/\\/g, '\\\\') + '\', function ($php) {\n';
   buffer += AST.prototype.toString.apply(this, [indent + '  ']);
   buffer += indent + '}, $php);\n';
   return buffer;
