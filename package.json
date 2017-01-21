@@ -1,6 +1,6 @@
 {
   "name": "php-transpiler",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": ":cactus: Transpiler API to convert php-parser AST to Javascript",
   "main": "src/index.js",
   "scripts": {

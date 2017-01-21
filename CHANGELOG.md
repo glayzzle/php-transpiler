@@ -1,3 +1,12 @@
+## [Version 0.0.4](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.4) (2017-1-22)
+
+### Patches
+
+- up: [`74218e1`](https://github.com/glayzzle/php-transpiler/commit/74218e1)
+- fix the function name (bug with coverage tools): [`3fa3744`](https://github.com/glayzzle/php-transpiler/commit/3fa3744)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.0.3...v0.0.4)
+
 ## [Version 0.0.3](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.3) (2017-1-22)
 
 ### Minor Changes
