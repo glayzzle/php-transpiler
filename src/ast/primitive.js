@@ -25,7 +25,7 @@ Primitive.prototype.toString = function () {
       .replace(/\r/g, '\\r')
       .replace(/'/g, '\\\'')
       + '\'';
-  } else if (this.node.kind === 'integer') {
+  } else if (this.node.kind === 'number') {
     return this.node.value;
   } else if (this.node.kind === 'boolean') {
     return this.node.value ? 'true' : 'false';
