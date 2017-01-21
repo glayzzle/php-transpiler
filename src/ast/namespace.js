@@ -10,18 +10,18 @@ var AST = require('../ast');
 /**
  * @constructor AST/Namespace
  */
-var Namespace = AST.extends(function(parent, options) {
+var Namespace = AST.extends(function(parent, name) {
   AST.apply(this, [parent]);
-  this.name = (options && options.name) || '';
+  this.name = name || '';
 });
 
 /**
  * Outputs the program
  */
-Namespace.prototype.toString = function () {
-  var buffer = '$php.namespace("' + this.name + '", function($php) {\n';
-  buffer += AST.prototype.toString.apply(this, []);
-  buffer += '});\n';
+Namespace.prototype.toString = function (indent) {
+  var buffer = indent + '$php.namespace("' + this.name + '", function($php) {\n';
+  buffer += AST.prototype.toString.apply(this, [indent + '  ']);
+  buffer += indent + '}, $php);\n';
   return buffer;
 };
 
