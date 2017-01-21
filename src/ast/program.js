@@ -18,9 +18,16 @@ var Program = AST.extends(function(parent) {
  * Outputs the program
  */
 Program.prototype.toString = function (indent) {
-  var buffer = '/** GLAYZZLE TRANSPILER @ ' + (new Date()).toString() + ' **/\n';
+  var buffer = '/**' +
+    '\n * GLAYZZLE GENERATED FILE' +
+    '\n * @date ' + (new Date()).toString() +
+    '\n * @see https://github.com/glayzzle/php-transpiler' +
+    '\n */\n'
+  ;
   buffer += 'module.exports = function($php) {\n';
-  buffer += AST.prototype.toString.apply(this, [indent + '  ']);
+  indent += '  ';
+  buffer += this.variablesToString(indent);
+  buffer += AST.prototype.toString.apply(this, [indent]);
   buffer += '};\n';
   return buffer;
 };
