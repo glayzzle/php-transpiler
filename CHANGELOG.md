@@ -1,4 +1,4 @@
-## [Version 0.0.2](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.2) (2017-1-21)
+## [Version 0.0.3](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.2) (2017-1-21)
 
 ### Minor Changes
 
@@ -16,10 +16,6 @@
 
 - make tests pass: [`5f1b358`](https://github.com/glayzzle/php-transpiler/commit/5f1b358)
 
-[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.0.1...v0.0.2)
-
-## [Version 0.0.1](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.1) (2017-1-20)
-
-### Patches
-
 - add travis & coveralls: [`fc993d7`](https://github.com/glayzzle/php-transpiler/commit/fc993d7)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.0.1...v0.0.2)
