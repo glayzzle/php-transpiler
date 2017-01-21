@@ -28,17 +28,27 @@ AST.register = function (name, ctor) {
  * Extends the AST node
  */
 AST.extends = function (ctor) {
-  ctor.prototype = Object.create(this.prototype);
-  ctor.extends = this.extends;
+  ctor.prototype = new this();
   ctor.prototype.constructor = ctor;
+  ctor.extends = this.extends.bind(ctor);
   return ctor;
 };
 
 /**
  * Creates a new node
  */
+AST.prototype.create = function (name, options) {
+  if (!(name in astNodes)) {
+    throw new Error('Undefined node ' + name)
+  }
+  return new astNodes[name](this, options);
+};
+
+/**
+ * Creates a new node
+ */
 AST.prototype.append = function (name, options) {
-  var node = new astNodes[name](this, options);
+  var node = this.create(name, options);
   this._nodes.push(node);
   return node;
 };
@@ -47,9 +57,22 @@ AST.prototype.append = function (name, options) {
  * Creates a new node
  */
 AST.prototype.prepend = function (name, options) {
-  var node = new astNodes[name](this, options);
+  var node = this.create(name, options);
   this._nodes.unshift(node);
   return node;
+};
+
+/**
+ * Serialize the output
+ */
+AST.prototype.variablesToString = function (indent) {
+  var buffer = '';
+  if (this.scope && this.scope.variables) {
+    for(var n in this.scope.variables) {
+      buffer += indent + 'var ' + n + ';\n';
+    }
+  }
+  return buffer;
 };
 
 /**
