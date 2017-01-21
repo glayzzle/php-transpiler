@@ -12,6 +12,6 @@ module.exports = function (node, state, output) {
   this.visit(
     node.arguments,
     state,
-    output.append('statement').append('call', '$php.stdout')
+    output.append('statement').append('call', '$php.stdout.print')
   );
 };

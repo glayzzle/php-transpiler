@@ -20,7 +20,7 @@ var Primitive = AST.extends(function(parent, node) {
  */
 Primitive.prototype.toString = function () {
   if (this.node.kind === 'string') {
-    return '\'' + node.value
+    return '\'' + this.node.value
       .replace(/\n/g, '\\n')
       .replace(/\r/g, '\\r')
       .replace(/'/g, '\\\'')

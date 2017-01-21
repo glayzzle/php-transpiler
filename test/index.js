@@ -1,14 +1,13 @@
 var should = require('should');
 var transpiler = require('../src/index');
+var parser = require('php-parser');
 
 describe('init', function() {
   it('should work', function() {
-    var IO = new transpiler();
     console.log(
-      IO.generate({
-        kind: 'program',
-        children: []
-      })
+      transpiler.generate(
+        parser.parseCode('<?php echo "Hello world";')
+      )
     );
   });
 });

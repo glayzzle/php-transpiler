@@ -5,8 +5,11 @@
  */
 'use strict';
 
+// Output AST manager
 var AST = require('./ast');
+// Parsing state object
 var State = require('./state');
+// List generic visitors
 var Visitors = {
   'program': require('./visitor/program'),
   'namespace': require('./visitor/namespace'),
@@ -22,8 +25,13 @@ var Visitors = {
  * @constructor Transpiler
  */
 var Transpiler = function (options) {
-  this.options = options;
   this.visitors = {};
+  if (options) {
+    // list of customised visitors
+    if ('visitors' in options) {
+      this.visitors = options.visitors
+    }
+  }
 };
 
 /**
@@ -36,9 +44,21 @@ Transpiler.prototype.generate = function (ast) {
   var output = new AST(this);
   var state = new State();
   this.visit(ast, state, output);
-  return output.toString();
+  return output.toString('');
 };
 
+/**
+ * Static helper
+ * @return {String}
+ */
+Transpiler.generate = function(ast, options) {
+  return (new Transpiler(options)).generate(ast);
+};
+
+/**
+ * Generic node visitor
+ * @return void
+ */
 Transpiler.prototype.visit = function (node, state, output) {
   if (Array.isArray(node)) {
     for(var i = 0; i < node.length; i++) {
@@ -46,7 +66,9 @@ Transpiler.prototype.visit = function (node, state, output) {
     }
   } else {
     var fn = node.kind in this.visitors ? this.visitors[node.kind] : Visitors[node.kind];
-    fn.apply(this, [node, state, output]);
+    if (typeof fn === 'function') {
+      fn.apply(this, [node, state, output]);
+    }
   }
 };
 
