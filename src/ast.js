@@ -35,6 +35,17 @@ AST.extends = function (ctor) {
 };
 
 /**
+ * Registers a new AST constructor
+ */
+AST.prototype.transpiler = function () {
+  if (!(this._parent instanceof AST)) {
+    return this._parent;
+  } else if (this._parent) {
+    return this._parent.transpiler();
+  }
+};
+
+/**
  * Creates a new node
  */
 AST.prototype.create = function (name, options) {
@@ -69,7 +80,9 @@ AST.prototype.variablesToString = function (indent) {
   var buffer = '';
   if (this.scope && this.scope.variables) {
     for(var n in this.scope.variables) {
-      buffer += indent + 'var ' + n + ';\n';
+      if (this.scope.variables[n].from === 'scope') {
+        buffer += indent + 'var ' + n + ';\n';
+      }
     }
   }
   return buffer;

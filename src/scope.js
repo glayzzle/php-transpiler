@@ -22,7 +22,7 @@ Scope.prototype.variable = function(name) {
   if (typeof name === 'string') {
     if (!(name in this.variables)) {
       this.variables[name] = {
-        local: true
+        from: 'scope'
       };
     }
   } else {
