@@ -20,7 +20,10 @@ var Visitors = {
   'boolean': require('./visitor/primitive'),
   'assign': require('./visitor/assign'),
   'variable': require('./visitor/variable'),
-  'bin': require('./visitor/bin')
+  'bin': require('./visitor/bin'),
+  'function': require('./visitor/function'),
+  'closure': require('./visitor/function'),
+  'method': require('./visitor/function')
 };
 
 /**
@@ -29,10 +32,14 @@ var Visitors = {
  */
 var Transpiler = function (options) {
   this.visitors = {};
+  // - module : expose as module.exports = function($php) ...
+  // - body : expose only the body (used by evals)
+  this.mode = 'module';
+
+  // extends with options
   if (options) {
-    // list of customised visitors
-    if ('visitors' in options) {
-      this.visitors = options.visitors
+    for(var k in options) {
+      this[k] = options;
     }
   }
 };
@@ -72,7 +79,7 @@ Transpiler.prototype.visit = function (node, state, output) {
     if (typeof fn === 'function') {
       fn.apply(this, [node, state, output]);
     } else {
-      throw new Error('Node ' + node.kind + ' is not yet supported');
+      output.append('unsupported', node);
     }
   }
 };
@@ -86,6 +93,8 @@ AST.register('call', require('./ast/call'));
 AST.register('assign', require('./ast/assign'));
 AST.register('variable', require('./ast/variable'));
 AST.register('bin', require('./ast/bin'));
+AST.register('function', require('./ast/function'));
+AST.register('unsupported', require('./ast/unsupported'));
 
 // exports
 module.exports = Transpiler;
