@@ -11,12 +11,12 @@
 module.exports = function (node, state, output) {
   // sets the current namespace name
   var previousNamespace = state.namespace;
-  state.namespace = node.name;
+  state.namespace = node.name.name;
   // parse inner childs
   this.visit(
     node.children,
     state,
-    output.append('namespace', node.name)
+    output.append('namespace', node.name.name)
   );
   state.namespace = previousNamespace;
 };

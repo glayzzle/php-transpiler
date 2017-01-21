@@ -12,6 +12,6 @@ module.exports = function (node, state, output) {
   this.visit(
     node.children,
     state,
-    output.append('program')
+    state.addScope(output.append('program')).node
   );
 };
