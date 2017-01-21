@@ -55,10 +55,10 @@ AST.prototype.prepend = function (name, options) {
 /**
  * Serialize the output
  */
-AST.prototype.toString = function () {
+AST.prototype.toString = function (indent) {
   var buffer = '';
   for(var i = 0; i < this._nodes.length; i++) {
-    buffer += this._nodes[i].toString();
+    buffer += this._nodes[i].toString(indent);
   }
   return buffer;
 };
