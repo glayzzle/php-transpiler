@@ -6,12 +6,17 @@
 'use strict';
 
 /**
- * Visits the program node
+ * Visits the namespace node
  */
 module.exports = function (node, state, output) {
+  // sets the current namespace name
+  var previousNamespace = state.namespace;
+  state.namespace = node.name;
+  // parse inner childs
   this.visit(
     node.children,
     state,
-    output.append('namespace')
+    output.append('namespace', node.name)
   );
+  state.namespace = previousNamespace;
 };
