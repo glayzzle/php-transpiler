@@ -8,6 +8,11 @@
 // the scope class
 var Scope = require('./scope');
 
+var reservedTypes = [
+  'self', 'int', 'string',
+  'array', 'bool', 'float', 'callable'
+];
+
 /**
  * Current parsing state
  * @constructor State
@@ -16,6 +21,26 @@ var State = function () {
   this.namespace = '';
   this.uses = {};
   this.scopes = [];
+  this.functions = {};
+  this.classes = {};
+};
+
+/**
+ * Registers a function
+ */
+State.prototype.getFunction = function (name) {
+  if (!(name in this.functions)) {
+    var lookup = name[0] === '?';
+    if (lookup) {
+      name = name.substring(1);
+    }
+    this.functions[name] = {
+      name: name,
+      cb: '$' + name.replace(/\\/g, '_'),
+      lookup: lookup
+    };
+  }
+  return this.functions[name].cb;
 };
 
 /**
@@ -48,7 +73,7 @@ State.prototype.scope = function () {
  * Resolves a name
  * @see http://php.net/manual/en/language.namespaces.rules.php
  */
-State.prototype.resolve = function (identifier) {
+State.prototype.resolve = function (identifier, asClass) {
   if (identifier.resolution === 'rn') {
     // Relative names always resolve to the name with namespace replaced
     // by the current namespace. If the name occurs in the global namespace,
@@ -62,7 +87,20 @@ State.prototype.resolve = function (identifier) {
     // For instance \A\B resolves to A\B.
     return identifier.name;
   } else if (identifier.resolution === 'uqn') {
-    // Unqualified name
+    // Unqualified name :
+    // 1. search into imports
+    if (identifier.name in this.uses) {
+      return this.uses[identifier.name].name;
+    }
+    if (reservedTypes.indexOf(identifier.name) > -1) {
+      return identifier.name;
+    }
+    // 2. is it's a class like prefix with current namespace
+    if (asClass) {
+      return this.namespace + '\\' + identifier.name;
+    }
+    // 3. Try to resolve it at runtime
+    return '?' + this.namespace + '\\' + identifier.name;
   } else {
     // For qualified names the first segment of the name is translated
     // according to the current class/namespace import table. For example,
