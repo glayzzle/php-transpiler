@@ -122,20 +122,22 @@ fn.prototype.toString = function (indent) {
 
   // function body
   buffer += parameters.join(', ') + ') {\n';
-  buffer += checks.join('\n');
+  if (checks.length > 0) {
+    buffer += checks.join('\n') + '\n';
+  }
   buffer += this.variablesToString(indent);
   if (this.node.type) {
     buffer += indent + 'var $result = (function() {\n';
     buffer += AST.prototype.toString.apply(this, [indent + '  ']);
-    buffer += indent + '})();';
-    buffer = this.checkArgumentType(
+    buffer += indent + '})();\n';
+    buffer += this.checkArgumentType(
       this.node.nullable,
       '$result',
       this.node.type,
       indent,
       ' $php.type_error(-1, null, \'' + name + '\', \'' + this.node.type + '\', $result);'
     ).join('\n');
-    buffer += indent + 'return $result;';
+    buffer += '\n' + indent + 'return $result;\n';
   } else {
     buffer += AST.prototype.toString.apply(this, [indent]);
   }
