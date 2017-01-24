@@ -23,7 +23,12 @@ var Visitors = {
   'bin': require('./visitor/bin'),
   'function': require('./visitor/function'),
   'closure': require('./visitor/function'),
-  'method': require('./visitor/function')
+  'method': require('./visitor/function'),
+  'return': require('./visitor/return'),
+  'doc': require('./visitor/generic'),
+  'if': require('./visitor/if'),
+  'block': require('./visitor/generic'),
+  'call': require('./visitor/call')
 };
 
 /**
@@ -95,6 +100,10 @@ AST.register('variable', require('./ast/variable'));
 AST.register('bin', require('./ast/bin'));
 AST.register('function', require('./ast/function'));
 AST.register('unsupported', require('./ast/unsupported'));
+AST.register('return', require('./ast/return'));
+AST.register('doc', require('./ast/doc'));
+AST.register('if', require('./ast/if'));
+AST.register('block', require('./ast/block'));
 
 // exports
 module.exports = Transpiler;
