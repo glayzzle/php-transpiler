@@ -1,3 +1,29 @@
+## [Version 0.0.5](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.5) (2017-1-24)
+
+### Minor Changes
+
+- add build tools / browserify: [`79bcfed`](https://github.com/glayzzle/php-transpiler/commit/79bcfed)
+- use node 4: [`b9786da`](https://github.com/glayzzle/php-transpiler/commit/b9786da)
+- add generic wrapper: [`276dcfe`](https://github.com/glayzzle/php-transpiler/commit/276dcfe)
+- serialize comment nodes: [`0b1f6d6`](https://github.com/glayzzle/php-transpiler/commit/0b1f6d6)
+- implement return node: [`8e5fc09`](https://github.com/glayzzle/php-transpiler/commit/8e5fc09)
+- impl uqn + function resolution stack: [`4fec3f4`](https://github.com/glayzzle/php-transpiler/commit/4fec3f4)
+- resolves the function final name: [`4380688`](https://github.com/glayzzle/php-transpiler/commit/4380688)
+- add a generic block writer: [`7da02c7`](https://github.com/glayzzle/php-transpiler/commit/7da02c7)
+- impl if statements: [`845a7d7`](https://github.com/glayzzle/php-transpiler/commit/845a7d7)
+- register new nodes: [`54ced98`](https://github.com/glayzzle/php-transpiler/commit/54ced98)
+- add an import header for lazy methods resolution: [`3d3f618`](https://github.com/glayzzle/php-transpiler/commit/3d3f618)
+
+### Patches
+
+- complete sample: [`bec7f69`](https://github.com/glayzzle/php-transpiler/commit/bec7f69)
+- first build: [`0d5a1cd`](https://github.com/glayzzle/php-transpiler/commit/0d5a1cd)
+- fix output on multiple lines: [`609a346`](https://github.com/glayzzle/php-transpiler/commit/609a346)
+- fix type checks: [`76b4f45`](https://github.com/glayzzle/php-transpiler/commit/76b4f45)
+- fix call type / change into statement: [`0fabf71`](https://github.com/glayzzle/php-transpiler/commit/0fabf71)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.0.4...v0.0.5)
+
 ## [Version 0.0.4](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.4) (2017-1-22)
 
 ### Patches
