@@ -5,14 +5,14 @@
  */
 'use strict';
 
-var AST = require('../ast');
+var Statement = require('./statement');
 
 /**
  * @constructor AST/Call
  */
-var Call = AST.extends(function(parent, what) {
-  AST.apply(this, [parent]);
-  this.what = what || '';
+var Call = Statement.extends(function(parent, what) {
+  Statement.apply(this, [parent]);
+  this.what = what;
 });
 
 /**
@@ -25,7 +25,12 @@ Call.prototype.toString = function (indent) {
       this._nodes[i].toString(indent)
     );
   }
-  return this.what + ' (' + args.join(', ') + ')';
+  var buffer = this.what + ' (' + args.join(', ') + ')';
+  if (this._parent instanceof Statement) {
+    return buffer;
+  } else {
+    return indent + buffer + '\n';
+  }
 };
 
 module.exports = Call;
