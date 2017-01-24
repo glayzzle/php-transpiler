@@ -31,6 +31,14 @@ var jsCode = transpiler.generate(
 console.log(jsCode);
 ```
 
+Will output :
+
+```
+module.exports = function($php) {
+  $php.stdout.print ('hello world');
+};
+```
+
 # Misc
 
 This library is released under BSD-3 license clause.
