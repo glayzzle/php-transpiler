@@ -85,6 +85,9 @@ AST.prototype.variablesToString = function (indent) {
       }
     }
   }
+  if (buffer.length > 0) {
+    buffer = '\n' + indent + '// variables into current scope\n' + buffer;
+  }
   return buffer;
 };
 

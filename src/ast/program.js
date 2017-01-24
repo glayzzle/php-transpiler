@@ -32,6 +32,18 @@ Program.prototype.toString = function (indent) {
   } else {
     buffer = '';
   }
+
+  var fnBuffer = '';
+  for(var n in this.functions) {
+    var fn = this.functions[n];
+    fnBuffer += indent + 'var ' + fn.cb + ' = $php.context.function.get(\''+fn.name+'\', '+(
+      fn.lookup ? 'true': 'false'
+    )+');\n';
+  }
+  if (fnBuffer.length > 0) {
+    buffer += indent + '// function imports\n' + fnBuffer;
+  }
+
   buffer += this.variablesToString(indent);
   buffer += AST.prototype.toString.apply(this, [indent]);
   if (isModule) {

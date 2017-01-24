@@ -9,9 +9,8 @@
  * Visits the program node
  */
 module.exports = function (node, state, output) {
-  this.visit(
-    node.children,
-    state,
-    state.addScope(output.append('program')).node
-  );
+  var main = state.addScope(output.append('program')).node;
+  this.visit(node.children, state, main);
+  main.functions = state.functions;
+  main.classes = state.classes;
 };

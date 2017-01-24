@@ -11,6 +11,8 @@ namespace foo\bar {
     // return $a < 1 ? 1 : fibo($a - 2) + fibo($a - 1);
     if ($a < 1) {
       return 1; /* here */
+    } else if (false) {
+      return true;
     } else {
       return fibo($a - 2) + fibo($a - 1);
     }

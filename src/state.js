@@ -36,7 +36,7 @@ State.prototype.getFunction = function (name) {
     }
     this.functions[name] = {
       name: name,
-      cb: '$' + name.replace(/\\/g, '_'),
+      cb: '$fn_' + name.replace(/\\/g, '_'),
       lookup: lookup
     };
   }
