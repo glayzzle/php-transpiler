@@ -24,9 +24,12 @@
   "homepage": "https://github.com/glayzzle/php-transpiler#readme",
   "devDependencies": {
     "coveralls": "^2.11.15",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "php-parser": "^1.0",
+    "php-parser": "latest",
     "should": "^11.1.2"
   }
 }
