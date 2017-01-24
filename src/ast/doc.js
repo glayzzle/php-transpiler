@@ -20,7 +20,11 @@ var Doc = AST.extends(function(parent, node) {
  */
 Doc.prototype.toString = function (indent) {
   if (this.node.isDoc) {
-    return indent + '/** ' + this.node.lines.join('\n'+indent+' * ') + ' */\n';
+    var body = this.node.lines.join('\n'+indent+' * ');
+    if (body.substring(body.length - 3) === ' * ') {
+      body = body.substring(0, body.length - 3)
+    }
+    return indent + '/** ' + body + ' */\n';
   } else {
     return indent + '// ' + this.node.lines.join('\n'+indent+'// ') + '\n';
   }
