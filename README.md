@@ -5,7 +5,7 @@ Transpiler API to convert [php-parser](https://github.com/glayzzle/php-parser) A
 
 [![npm version](https://badge.fury.io/js/php-transpiler.svg)](https://www.npmjs.com/package/php-transpiler)
 [![Build Status](https://travis-ci.org/glayzzle/php-transpiler.svg?branch=master)](https://travis-ci.org/glayzzle/php-transpiler)
-[![Coverage Status](https://coveralls.io/repos/github/glayzzle/php-transpiler/badge.svg?branch=master)](https://coveralls.io/github/glayzzle/php-transpiler?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/glayzzle/php-transpiler/badge.svg?branch=master&v=2017-01-26)](https://coveralls.io/github/glayzzle/php-transpiler?branch=master)
 [![Gitter](https://img.shields.io/badge/GITTER-join%20chat-green.svg)](https://gitter.im/glayzzle/Lobby)
 
 Installation
