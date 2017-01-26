@@ -46,6 +46,25 @@ AST.prototype.transpiler = function () {
 };
 
 /**
+ * Scans for a specific parent instance
+ */
+AST.prototype.parent = function (type) {
+  var parent = this._parent;
+  while(!(parent instanceof type)) {
+    parent = parent._parent;
+    if (!parent) break;
+  }
+  return parent;
+};
+
+/**
+ * Serialize the specified string value
+ */
+AST.prototype.string = function (value) {
+  return '\'' + value.replace(/\\/g, '\\\\')  + '\'';
+};
+
+/**
  * Creates a new node
  */
 AST.prototype.create = function (name, options) {
