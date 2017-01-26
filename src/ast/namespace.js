@@ -19,9 +19,9 @@ var Namespace = AST.extends(function(parent, name) {
  * Outputs the program
  */
 Namespace.prototype.toString = function (indent) {
-  var buffer = indent + '$php.context.namespace.declare(\'' + this.name.replace(/\\/g, '\\\\') + '\', function ($php) {\n';
-  buffer += AST.prototype.toString.apply(this, [indent + '  ']);
-  buffer += indent + '}, $php);\n';
+  var buffer = indent + '$php.context.namespace.use(' + this.string(this.name) + ');\n';
+  buffer += AST.prototype.toString.apply(this, [indent]);
+  buffer += indent + '$php.context.namespace.use();\n'
   return buffer;
 };
 
