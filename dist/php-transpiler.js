@@ -1,4 +1,4 @@
-/*! php-transpiler - BSD3 License - 2017-01-24 */
+/*! php-transpiler - BSD3 License - 2017-01-26 */
 
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*!
@@ -46,6 +46,25 @@ AST.prototype.transpiler = function () {
   } else if (this._parent) {
     return this._parent.transpiler();
   }
+};
+
+/**
+ * Scans for a specific parent instance
+ */
+AST.prototype.parent = function (type) {
+  var parent = this._parent;
+  while(!(parent instanceof type)) {
+    parent = parent._parent;
+    if (!parent) break;
+  }
+  return parent;
+};
+
+/**
+ * Serialize the specified string value
+ */
+AST.prototype.string = function (value) {
+  return '\'' + value.replace(/\\/g, '\\\\')  + '\'';
 };
 
 /**
@@ -145,7 +164,7 @@ Assign.prototype.toString = function (indent) {
 
 module.exports = Assign;
 
-},{"./statement":13}],3:[function(require,module,exports){
+},{"./statement":15}],3:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -169,6 +188,9 @@ var Bin = Statement.extends(function(parent, type) {
 Bin.prototype.toString = function (indent) {
   // @todo handle operators like << or >>
   if (this._nodes.length === 2) {
+    if (this.type === '.') {
+      this.type = '+';
+    }
     var buffer = this._nodes[0].toString(indent) + ' ' + this.type + ' ' + this._nodes[1].toString(indent);
     if (this._parent instanceof Statement) {
       return buffer;
@@ -182,7 +204,7 @@ Bin.prototype.toString = function (indent) {
 
 module.exports = Bin;
 
-},{"./statement":13}],4:[function(require,module,exports){
+},{"./statement":15}],4:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -248,7 +270,7 @@ Call.prototype.toString = function (indent) {
 
 module.exports = Call;
 
-},{"./statement":13}],6:[function(require,module,exports){
+},{"./statement":15}],6:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -291,6 +313,37 @@ module.exports = Doc;
  */
 'use strict';
 
+var Statement = require('./statement');
+
+/**
+ * @constructor AST/For
+ */
+var For = Statement.extends(function(parent) {
+  Statement.apply(this, [parent]);
+});
+
+/**
+ * Outputs the statement
+ */
+For.prototype.toString = function (indent) {
+
+  return indent + 'for (' +
+    this._nodes[0].toString(indent) + '; ' +
+    this._nodes[1].toString(indent) + '; ' +
+    this._nodes[2].toString(indent) +
+  ') ' +  this._nodes[3].toString(indent);
+};
+
+module.exports = For;
+
+},{"./statement":15}],8:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
 var AST = require('../ast');
 
 /**
@@ -308,28 +361,28 @@ var fn = AST.extends(function(parent, node) {
 fn.prototype.checkArgumentType = function (nullable, name, type, indent, errTrigger) {
   var checks = [];
   if (nullable) {
-    checks.push(indent + 'if(' + name + ' != null) {\n');
+    checks.push(indent + 'if (' + name + ' != null) {\n');
     indent += '  ';
   }
   if (type === 'self') {
-    checks.push(indent + 'if(!(' + name + ' instanceof this))' + errTrigger);
+    checks.push(indent + 'if (!(' + name + ' instanceof this))' + errTrigger);
   } else if (type === 'array') {
-    checks.push(indent + 'if(!Array.isArray(' + name + '))' + errTrigger);
+    checks.push(indent + 'if (!Array.isArray(' + name + '))' + errTrigger);
   } else if (type === 'callable') {
     // @fixme arrays / strings can also be valid callable
     // http://php.net/manual/en/language.types.callable.php
-    checks.push(indent + 'if(typeof ' + name + ' !== \'function\')' + errTrigger);
+    checks.push(indent + 'if (typeof ' + name + ' !== \'function\')' + errTrigger);
   } else if (type === 'bool') {
-    checks.push(indent + 'if(typeof ' + name + ' !== \'boolean\' && !(' + name + ' instanceof Boolean))' + errTrigger);
+    checks.push(indent + 'if (typeof ' + name + ' !== \'boolean\' && !(' + name + ' instanceof Boolean))' + errTrigger);
   } else if (type === 'float') {
-    checks.push(indent + 'if(typeof ' + name + ' !== \'number\' || ' + name + ' % 1 === 0)' + errTrigger);
+    checks.push(indent + 'if (typeof ' + name + ' !== \'number\' || ' + name + ' % 1 === 0)' + errTrigger);
   } else if (type === 'int') {
-    checks.push(indent + 'if(typeof ' + name + ' !== \'number\' || ' + name + ' % 1 !== 0)' + errTrigger);
+    checks.push(indent + 'if (typeof ' + name + ' !== \'number\' || ' + name + ' % 1 !== 0)' + errTrigger);
   } else if (type === 'string') {
-    checks.push(indent + 'if(typeof ' + name + ' !== \'string\' && !(' + name + ' instanceof String))' + errTrigger);
+    checks.push(indent + 'if (typeof ' + name + ' !== \'string\' && !(' + name + ' instanceof String))' + errTrigger);
   } else {
     // check the class
-    checks.push(indent + 'if(!' + name + '.is(\'' + type + '\'))' + errTrigger);
+    checks.push(indent + 'if (!' + name + '.is(\'' + type + '\'))' + errTrigger);
   }
   if (nullable) {
     indent = indent.substring(0, indent.length - 2);
@@ -354,15 +407,19 @@ fn.prototype.toString = function (indent) {
 
   // arguments
   var parameters = [];
-  var checks = [];
+  var typeChecks = [];
+  var defaultChecks = [];
+  var argsReflection = [];
   indent += '  ';
 
   for(var i = 0; i < this.node.arguments.length; i++) {
     var arg = this.node.arguments[i];
     parameters.push(arg.name);
+    var argItem = { name: arg.name };
     if (!arg.variadic) {
       if (arg.type) {
-        checks = checks.concat(
+        argItem.type = arg.type;
+        typeChecks = typeChecks.concat(
           this.checkArgumentType(
             arg.nullable || (
               arg.value && arg.value.kind === 'constref' &&
@@ -377,18 +434,19 @@ fn.prototype.toString = function (indent) {
         );
       }
       if (arg.value) {
+        argItem.default = arg.value;
         // @todo sets a default value if not defined
-        checks.push(indent + 'if (typeof ' + arg.name + ' === \'undefined\') ' + arg.name + ' = null;\n');
+        defaultChecks.push(indent + 'if (typeof ' + arg.name + ' === \'undefined\') ' + arg.name + ' = null;\n');
       }
     } else {
       // handle variadic arguments
-      checks.push(
+      defaultChecks.push(
         indent + arg.name + ' = Array.prototype.slice.call(arguments, ' + i + ');'
       );
       if (arg.type) {
         // check each variadic argument
-        checks.push(indent + 'for(var $i = 0; $i < ' + arg.name + '.length; $i++) {\n');
-        checks = checks.concat(
+        typeChecks.push(indent + 'for(var $i = 0; $i < ' + arg.name + '.length; $i++) {\n');
+        typeChecks = typeChecks.concat(
           this.checkArgumentType(
             arg.nullable || (
               arg.value && arg.value.kind === 'constref' &&
@@ -401,39 +459,53 @@ fn.prototype.toString = function (indent) {
             ' $php.type_error(' + i + ', \'' + arg.name + '\', \'' + name + '\', \'' + arg.type + '\', ' + arg.name + ');'
           )
         );
-        checks.push(indent + '}');
+        typeChecks.push(indent + '}');
       }
     }
+    argsReflection.push(argItem);
   }
 
   // function body
   buffer += parameters.join(', ') + ') {\n';
-  if (checks.length > 0) {
-    buffer += checks.join('\n') + '\n';
+  if (defaultChecks.length > 0) {
+    buffer += defaultChecks.join('\n') + '\n';
+  }
+  if (typeChecks.length > 0) {
+    buffer += indent + 'if ($php.context.strictTypes) {\n';
+    buffer += '  ' + typeChecks.join('\n  ') + '\n';
+    buffer += indent + '}\n';
   }
   buffer += this.variablesToString(indent);
+  var returnType = 'null';
   if (this.node.type) {
-    buffer += indent + 'var $result = (function() {\n';
+    returnType = '\''+this.node.type+'\'';
+    buffer += indent + 'var $result;\n';
+    buffer += indent + 'do {\n';
     buffer += AST.prototype.toString.apply(this, [indent + '  ']);
-    buffer += indent + '})();\n';
-    buffer += this.checkArgumentType(
+    buffer += indent + '} while(false);\n';
+    buffer += indent + 'if ($php.context.strictTypes) {\n';
+    buffer += '  ' + this.checkArgumentType(
       this.node.nullable,
       '$result',
       this.node.type,
       indent,
       ' $php.type_error(-1, null, \'' + name + '\', \'' + this.node.type + '\', $result);'
-    ).join('\n');
-    buffer += '\n' + indent + 'return $result;\n';
+    ).join('\n  ') + '\n' + indent + '}\n';
   } else {
     buffer += AST.prototype.toString.apply(this, [indent]);
   }
+  buffer += indent + 'return $result;\n';
   indent = indent.substring(0, indent.length - 2);
   buffer += indent + '}';
 
   // encapsulate
   if (this.node.kind === 'function') {
     // global function
-    buffer = indent + '$php.context.function.declare(\''+this.node.name+'\', ' + buffer + ');\n'
+    var body = buffer;
+    buffer = indent + '$php.context.function.declare(\n';
+    buffer += indent + '  \''+this.node.name+'\',\n';
+    buffer += indent + '  '+JSON.stringify(argsReflection)+',\n';
+    buffer += indent + '  '+returnType+', ' + body + ');\n';
   } else if (this.node.kind === 'method') {
     // @todo method declaration
   } else if (!(this._parent instanceof Statement)) {
@@ -444,7 +516,55 @@ fn.prototype.toString = function (indent) {
 
 module.exports = fn;
 
-},{"../ast":1}],8:[function(require,module,exports){
+},{"../ast":1}],9:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
+var Statement = require('./statement');
+var AST = require('../ast');
+
+/**
+ * @constructor AST/Generic
+ */
+var Generic = Statement.extends(function(parent, options) {
+  Statement.apply(this, [parent]);
+  this.options = options;
+});
+
+/**
+ * Outputs the statement
+ */
+Generic.prototype.toString = function (indent) {
+  var buffer = '';
+  if (this.options.pre) {
+    if (typeof this.options.pre === 'function') {
+      buffer += this.options.pre.apply(this, [indent]);
+    } else {
+      buffer += this.options.pre;
+    }
+  }
+  buffer += AST.prototype.toString.apply(this, [indent]);
+  if (this.options.post) {
+    if (typeof this.options.post === 'function') {
+      buffer += this.options.post.apply(this, [indent]);
+    } else {
+      buffer += this.options.post;
+    }
+  }
+  if (this._parent instanceof Statement) {
+    return buffer;
+  } else {
+    return indent + buffer + ';\n';
+  }
+};
+
+module.exports = Generic;
+
+},{"../ast":1,"./statement":15}],10:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -483,7 +603,7 @@ If.prototype.toString = function (indent) {
 
 module.exports = If;
 
-},{"./statement":13}],9:[function(require,module,exports){
+},{"./statement":15}],11:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -505,15 +625,15 @@ var Namespace = AST.extends(function(parent, name) {
  * Outputs the program
  */
 Namespace.prototype.toString = function (indent) {
-  var buffer = indent + '$php.context.namespace.declare(\'' + this.name.replace(/\\/g, '\\\\') + '\', function ($php) {\n';
-  buffer += AST.prototype.toString.apply(this, [indent + '  ']);
-  buffer += indent + '}, $php);\n';
+  var buffer = indent + '$php.context.namespace.use(' + this.string(this.name) + ');\n';
+  buffer += AST.prototype.toString.apply(this, [indent]);
+  buffer += indent + '$php.context.namespace.use();\n'
   return buffer;
 };
 
 module.exports = Namespace;
 
-},{"../ast":1}],10:[function(require,module,exports){
+},{"../ast":1}],12:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -551,7 +671,7 @@ Primitive.prototype.toString = function () {
 
 module.exports = Primitive;
 
-},{"../ast":1}],11:[function(require,module,exports){
+},{"../ast":1}],13:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -590,9 +710,9 @@ Program.prototype.toString = function (indent) {
   var fnBuffer = '';
   for(var n in this.functions) {
     var fn = this.functions[n];
-    fnBuffer += indent + 'var ' + fn.cb + ' = $php.context.function.get(\''+fn.name+'\', '+(
+    fnBuffer += indent + 'var ' + fn.cb + ' = $php.context.function.callback('+this.string(fn.name)+', '+(
       fn.lookup ? 'true': 'false'
-    )+');\n';
+    )+', function(cb) { ' + fn.cb + ' = cb; });\n';
   }
   if (fnBuffer.length > 0) {
     buffer += indent + '// function imports\n' + fnBuffer;
@@ -608,7 +728,7 @@ Program.prototype.toString = function (indent) {
 
 module.exports = Program;
 
-},{"../ast":1}],12:[function(require,module,exports){
+},{"../ast":1}],14:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -617,6 +737,7 @@ module.exports = Program;
 'use strict';
 
 var Statement = require('./statement');
+var Fn = require('./function');
 var AST = require('../ast');
 
 /**
@@ -630,8 +751,19 @@ var Return = Statement.extends(function(parent) {
  * Outputs the statement
  */
 Return.prototype.toString = function (indent) {
+  var fn = this.parent(Fn);
   var buffer = 'return ';
+  if (fn && fn.node.type) {
+    buffer = '$result = ';
+  }
   buffer += AST.prototype.toString.apply(this, [indent]);
+  if (fn && fn.node.type) {
+    if (this._parent instanceof Statement) {
+      buffer = '(' + buffer + ', break)';
+    } else {
+      buffer += ';\n' + indent + 'break';
+    }
+  }
   if (this._parent instanceof Statement) {
     return buffer;
   } else {
@@ -641,7 +773,7 @@ Return.prototype.toString = function (indent) {
 
 module.exports = Return;
 
-},{"../ast":1,"./statement":13}],13:[function(require,module,exports){
+},{"../ast":1,"./function":8,"./statement":15}],15:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -671,7 +803,7 @@ Statement.prototype.toString = function (indent) {
 
 module.exports = Statement;
 
-},{"../ast":1}],14:[function(require,module,exports){
+},{"../ast":1}],16:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -698,7 +830,7 @@ Unsupported.prototype.toString = function (indent) {
 
 module.exports = Unsupported;
 
-},{"../ast":1}],15:[function(require,module,exports){
+},{"../ast":1}],17:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -731,7 +863,7 @@ Variable.prototype.toString = function () {
 
 module.exports = Variable;
 
-},{"../ast":1}],16:[function(require,module,exports){
+},{"../ast":1}],18:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -768,7 +900,7 @@ Scope.prototype.variable = function(name) {
 // exports
 module.exports = Scope;
 
-},{}],17:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -892,7 +1024,7 @@ State.prototype.resolve = function (identifier, asClass) {
 // exports
 module.exports = State;
 
-},{"./scope":16}],18:[function(require,module,exports){
+},{"./scope":18}],20:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -911,7 +1043,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -930,7 +1062,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -952,7 +1084,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -971,7 +1103,26 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
+/**
+ * Visits a if node
+ */
+module.exports = function (node, state, output) {
+  this.visit(
+    [node.init, node.test, node.increment, node.body],
+    state,
+    output.append('for')
+  );
+};
+
+},{}],25:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1020,7 +1171,7 @@ module.exports = function (node, state, output) {
   state.popScope();
 };
 
-},{}],23:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1045,7 +1196,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1072,7 +1223,7 @@ module.exports = function (node, state, output) {
   }
 };
 
-},{}],25:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1096,7 +1247,53 @@ module.exports = function (node, state, output) {
   state.namespace = previousNamespace;
 };
 
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
+/**
+ * Visits a (expr)++ node
+ */
+module.exports = function (node, state, output) {
+  this.visit(
+    node.what,
+    state,
+    output.append('generic', {
+      post: function() {
+        return node.type + node.type;
+      }
+    })
+  );
+};
+
+},{}],30:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
+/**
+ * Visits a ++(expr) node
+ */
+module.exports = function (node, state, output) {
+  this.visit(
+    node.what,
+    state,
+    output.append('generic', {
+      pre: function() {
+        return node.type + node.type;
+      }
+    })
+  );
+};
+
+},{}],31:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1111,7 +1308,7 @@ module.exports = function (node, state, output) {
   output.append('primitive', node);
 };
 
-},{}],27:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1129,7 +1326,7 @@ module.exports = function (node, state, output) {
   main.classes = state.classes;
 };
 
-},{}],28:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1148,7 +1345,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],29:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1195,7 +1392,10 @@ var Visitors = {
   'doc': require('./visitor/generic'),
   'if': require('./visitor/if'),
   'block': require('./visitor/generic'),
-  'call': require('./visitor/call')
+  'call': require('./visitor/call'),
+  'for': require('./visitor/for'),
+  'pre': require('./visitor/pre'),
+  'post': require('./visitor/post')
 };
 
 /**
@@ -1271,8 +1471,10 @@ AST.register('return', require('./ast/return'));
 AST.register('doc', require('./ast/doc'));
 AST.register('if', require('./ast/if'));
 AST.register('block', require('./ast/block'));
+AST.register('for', require('./ast/for'));
+AST.register('generic', require('./ast/generic'));
 
 // exports
 module.exports = Transpiler;
 
-},{"./ast":1,"./ast/assign":2,"./ast/bin":3,"./ast/block":4,"./ast/call":5,"./ast/doc":6,"./ast/function":7,"./ast/if":8,"./ast/namespace":9,"./ast/primitive":10,"./ast/program":11,"./ast/return":12,"./ast/statement":13,"./ast/unsupported":14,"./ast/variable":15,"./state":17,"./visitor/assign":18,"./visitor/bin":19,"./visitor/call":20,"./visitor/echo":21,"./visitor/function":22,"./visitor/generic":23,"./visitor/if":24,"./visitor/namespace":25,"./visitor/primitive":26,"./visitor/program":27,"./visitor/return":28,"./visitor/variable":29}]},{},[]);
+},{"./ast":1,"./ast/assign":2,"./ast/bin":3,"./ast/block":4,"./ast/call":5,"./ast/doc":6,"./ast/for":7,"./ast/function":8,"./ast/generic":9,"./ast/if":10,"./ast/namespace":11,"./ast/primitive":12,"./ast/program":13,"./ast/return":14,"./ast/statement":15,"./ast/unsupported":16,"./ast/variable":17,"./state":19,"./visitor/assign":20,"./visitor/bin":21,"./visitor/call":22,"./visitor/echo":23,"./visitor/for":24,"./visitor/function":25,"./visitor/generic":26,"./visitor/if":27,"./visitor/namespace":28,"./visitor/post":29,"./visitor/pre":30,"./visitor/primitive":31,"./visitor/program":32,"./visitor/return":33,"./visitor/variable":34}]},{},[]);
