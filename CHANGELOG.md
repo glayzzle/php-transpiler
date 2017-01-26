@@ -1,3 +1,28 @@
+## [Version 0.1.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.1.0) (2017-1-26)
+
+### Major Changes
+
+- implement for keyword: [`6a3758e`](https://github.com/glayzzle/php-transpiler/commit/6a3758e)
+- implement post variable operations: [`a80f878`](https://github.com/glayzzle/php-transpiler/commit/a80f878)
+- implement pre variable operation: [`a255278`](https://github.com/glayzzle/php-transpiler/commit/a255278)
+
+### Minor Changes
+
+- add a generic serialiser: [`371ad8e`](https://github.com/glayzzle/php-transpiler/commit/371ad8e)
+- (wip) start a property lookup visitor: [`a4404c9`](https://github.com/glayzzle/php-transpiler/commit/a4404c9)
+- add helpers / find a parent & convert to string: [`6ea38b8`](https://github.com/glayzzle/php-transpiler/commit/6ea38b8)
+- register new nodes: [`f0a32d7`](https://github.com/glayzzle/php-transpiler/commit/f0a32d7)
+
+### Patches
+
+- fix the concat operator: [`3819d6c`](https://github.com/glayzzle/php-transpiler/commit/3819d6c)
+- improve function performance (when return type is checked): [`342ba91`](https://github.com/glayzzle/php-transpiler/commit/342ba91)
+- fix function late state binding: [`c9f3304`](https://github.com/glayzzle/php-transpiler/commit/c9f3304)
+- avoid nested namespaces usage: [`02cf9e7`](https://github.com/glayzzle/php-transpiler/commit/02cf9e7)
+- improve tests: [`3e79383`](https://github.com/glayzzle/php-transpiler/commit/3e79383)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.0.5...v0.1.0)
+
 ## [Version 0.0.5](https://github.com/glayzzle/php-transpiler/releases/tag/v0.0.5) (2017-1-24)
 
 ### Minor Changes
