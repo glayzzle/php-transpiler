@@ -21,6 +21,9 @@ var Bin = Statement.extends(function(parent, type) {
 Bin.prototype.toString = function (indent) {
   // @todo handle operators like << or >>
   if (this._nodes.length === 2) {
+    if (this.type === '.') {
+      this.type = '+';
+    }
     var buffer = this._nodes[0].toString(indent) + ' ' + this.type + ' ' + this._nodes[1].toString(indent);
     if (this._parent instanceof Statement) {
       return buffer;
