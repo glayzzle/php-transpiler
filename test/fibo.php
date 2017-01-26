@@ -1,9 +1,5 @@
 <?php
 namespace foo\bar {
-  echo "Hello world";
-  $a = 1;
-  $b = 2;
-  $c = $a + $b;
   /**
    * The famous fibonnaci benchmark to test function calls
    */
@@ -17,5 +13,11 @@ namespace foo\bar {
       return fibo($a - 2) + fibo($a - 1);
     }
   }
-  echo fibo(30);
+  for($i = 10; $i < 20; $i++) {
+    echo $i . " => " . fibo($i);
+  }
 }
+echo "Hello world";
+$a = 1;
+$b = 2;
+$c = $a + $b;
