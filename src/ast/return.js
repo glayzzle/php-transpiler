@@ -6,6 +6,7 @@
 'use strict';
 
 var Statement = require('./statement');
+var Fn = require('./function');
 var AST = require('../ast');
 
 /**
@@ -19,8 +20,19 @@ var Return = Statement.extends(function(parent) {
  * Outputs the statement
  */
 Return.prototype.toString = function (indent) {
+  var fn = this.parent(Fn);
   var buffer = 'return ';
+  if (fn && fn.node.type) {
+    buffer = '$result = ';
+  }
   buffer += AST.prototype.toString.apply(this, [indent]);
+  if (fn && fn.node.type) {
+    if (this._parent instanceof Statement) {
+      buffer = '(' + buffer + ', break)';
+    } else {
+      buffer += ';\n' + indent + 'break';
+    }
+  }
   if (this._parent instanceof Statement) {
     return buffer;
   } else {
