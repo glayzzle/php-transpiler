@@ -31,7 +31,8 @@ var Visitors = {
   'call': require('./visitor/call'),
   'for': require('./visitor/for'),
   'pre': require('./visitor/pre'),
-  'post': require('./visitor/post')
+  'post': require('./visitor/post'),
+  'retif': require('./visitor/retif')
 };
 
 /**
@@ -109,6 +110,7 @@ AST.register('if', require('./ast/if'));
 AST.register('block', require('./ast/block'));
 AST.register('for', require('./ast/for'));
 AST.register('generic', require('./ast/generic'));
+AST.register('retif', require('./ast/retif'));
 
 // exports
 module.exports = Transpiler;
