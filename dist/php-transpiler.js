@@ -1,4 +1,4 @@
-/*! php-transpiler - BSD3 License - 2017-01-26 */
+/*! php-transpiler - BSD3 License - 2017-02-26 */
 
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*!
@@ -164,7 +164,7 @@ Assign.prototype.toString = function (indent) {
 
 module.exports = Assign;
 
-},{"./statement":15}],3:[function(require,module,exports){
+},{"./statement":16}],3:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -204,7 +204,7 @@ Bin.prototype.toString = function (indent) {
 
 module.exports = Bin;
 
-},{"./statement":15}],4:[function(require,module,exports){
+},{"./statement":16}],4:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -270,7 +270,7 @@ Call.prototype.toString = function (indent) {
 
 module.exports = Call;
 
-},{"./statement":15}],6:[function(require,module,exports){
+},{"./statement":16}],6:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -336,7 +336,7 @@ For.prototype.toString = function (indent) {
 
 module.exports = For;
 
-},{"./statement":15}],8:[function(require,module,exports){
+},{"./statement":16}],8:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -564,7 +564,7 @@ Generic.prototype.toString = function (indent) {
 
 module.exports = Generic;
 
-},{"../ast":1,"./statement":15}],10:[function(require,module,exports){
+},{"../ast":1,"./statement":16}],10:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -603,7 +603,7 @@ If.prototype.toString = function (indent) {
 
 module.exports = If;
 
-},{"./statement":15}],11:[function(require,module,exports){
+},{"./statement":16}],11:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -737,6 +737,37 @@ module.exports = Program;
 'use strict';
 
 var Statement = require('./statement');
+
+/**
+ * @constructor AST/RetIf
+ */
+var RetIf = Statement.extends(function(parent) {
+  Statement.apply(this, [parent]);
+});
+
+/**
+ * Outputs the statement
+ */
+RetIf.prototype.toString = function (indent) {
+  return '(' +
+     this._nodes[0].toString(indent) +
+    ') ? ' +
+    this._nodes[1].toString(indent) + ' : ' +
+    this._nodes[2].toString(indent)
+  ;
+};
+
+module.exports = RetIf;
+
+},{"./statement":16}],15:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
+var Statement = require('./statement');
 var Fn = require('./function');
 var AST = require('../ast');
 
@@ -773,7 +804,7 @@ Return.prototype.toString = function (indent) {
 
 module.exports = Return;
 
-},{"../ast":1,"./function":8,"./statement":15}],15:[function(require,module,exports){
+},{"../ast":1,"./function":8,"./statement":16}],16:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -803,7 +834,7 @@ Statement.prototype.toString = function (indent) {
 
 module.exports = Statement;
 
-},{"../ast":1}],16:[function(require,module,exports){
+},{"../ast":1}],17:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -830,7 +861,7 @@ Unsupported.prototype.toString = function (indent) {
 
 module.exports = Unsupported;
 
-},{"../ast":1}],17:[function(require,module,exports){
+},{"../ast":1}],18:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -863,7 +894,7 @@ Variable.prototype.toString = function () {
 
 module.exports = Variable;
 
-},{"../ast":1}],18:[function(require,module,exports){
+},{"../ast":1}],19:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -900,7 +931,7 @@ Scope.prototype.variable = function(name) {
 // exports
 module.exports = Scope;
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1024,7 +1055,7 @@ State.prototype.resolve = function (identifier, asClass) {
 // exports
 module.exports = State;
 
-},{"./scope":18}],20:[function(require,module,exports){
+},{"./scope":19}],21:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1043,7 +1074,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],21:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1062,7 +1093,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1084,7 +1115,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1103,7 +1134,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],24:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1122,7 +1153,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1171,7 +1202,7 @@ module.exports = function (node, state, output) {
   state.popScope();
 };
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1196,7 +1227,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1223,7 +1254,7 @@ module.exports = function (node, state, output) {
   }
 };
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1237,17 +1268,17 @@ module.exports = function (node, state, output) {
 module.exports = function (node, state, output) {
   // sets the current namespace name
   var previousNamespace = state.namespace;
-  state.namespace = node.name.name;
+  state.namespace = node.name;
   // parse inner childs
   this.visit(
     node.children,
     state,
-    output.append('namespace', node.name.name)
+    output.append('namespace', node.name)
   );
   state.namespace = previousNamespace;
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1270,7 +1301,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1293,7 +1324,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],31:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1308,7 +1339,7 @@ module.exports = function (node, state, output) {
   output.append('primitive', node);
 };
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1326,7 +1357,26 @@ module.exports = function (node, state, output) {
   main.classes = state.classes;
 };
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
+/*!
+ * Copyright (C) 2017 Glayzzle (BSD3 License)
+ * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
+ * @url http://glayzzle.com
+ */
+'use strict';
+
+/**
+ * Visits a ?: node
+ */
+module.exports = function (node, state, output) {
+  this.visit(
+    [node.test, node.trueExpr, node.falseExpr],
+    state,
+    output.append('retif')
+  );
+};
+
+},{}],35:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1345,7 +1395,7 @@ module.exports = function (node, state, output) {
   );
 };
 
-},{}],34:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 /*!
  * Copyright (C) 2017 Glayzzle (BSD3 License)
  * @authors https://github.com/glayzzle/php-transpiler/graphs/contributors
@@ -1395,7 +1445,8 @@ var Visitors = {
   'call': require('./visitor/call'),
   'for': require('./visitor/for'),
   'pre': require('./visitor/pre'),
-  'post': require('./visitor/post')
+  'post': require('./visitor/post'),
+  'retif': require('./visitor/retif')
 };
 
 /**
@@ -1473,8 +1524,9 @@ AST.register('if', require('./ast/if'));
 AST.register('block', require('./ast/block'));
 AST.register('for', require('./ast/for'));
 AST.register('generic', require('./ast/generic'));
+AST.register('retif', require('./ast/retif'));
 
 // exports
 module.exports = Transpiler;
 
-},{"./ast":1,"./ast/assign":2,"./ast/bin":3,"./ast/block":4,"./ast/call":5,"./ast/doc":6,"./ast/for":7,"./ast/function":8,"./ast/generic":9,"./ast/if":10,"./ast/namespace":11,"./ast/primitive":12,"./ast/program":13,"./ast/return":14,"./ast/statement":15,"./ast/unsupported":16,"./ast/variable":17,"./state":19,"./visitor/assign":20,"./visitor/bin":21,"./visitor/call":22,"./visitor/echo":23,"./visitor/for":24,"./visitor/function":25,"./visitor/generic":26,"./visitor/if":27,"./visitor/namespace":28,"./visitor/post":29,"./visitor/pre":30,"./visitor/primitive":31,"./visitor/program":32,"./visitor/return":33,"./visitor/variable":34}]},{},[]);
+},{"./ast":1,"./ast/assign":2,"./ast/bin":3,"./ast/block":4,"./ast/call":5,"./ast/doc":6,"./ast/for":7,"./ast/function":8,"./ast/generic":9,"./ast/if":10,"./ast/namespace":11,"./ast/primitive":12,"./ast/program":13,"./ast/retif":14,"./ast/return":15,"./ast/statement":16,"./ast/unsupported":17,"./ast/variable":18,"./state":20,"./visitor/assign":21,"./visitor/bin":22,"./visitor/call":23,"./visitor/echo":24,"./visitor/for":25,"./visitor/function":26,"./visitor/generic":27,"./visitor/if":28,"./visitor/namespace":29,"./visitor/post":30,"./visitor/pre":31,"./visitor/primitive":32,"./visitor/program":33,"./visitor/retif":34,"./visitor/return":35,"./visitor/variable":36}]},{},[]);
