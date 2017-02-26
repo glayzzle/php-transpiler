@@ -1,4 +1,6 @@
 <?php
+require_once 'foo.php';
+
 namespace foo\bar {
   /**
    * The famous fibonnaci benchmark to test function calls
@@ -12,7 +14,7 @@ namespace foo\bar {
     echo $i . " => " . fibo($i);
   }
 }
-echo "Hello world";
+echo "Hello\nworld";
 $a = 1;
 $b = 2;
 $c = $a + $b;
