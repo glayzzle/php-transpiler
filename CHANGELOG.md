@@ -1,3 +1,17 @@
+## [Version 0.2.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.2.0) (2017-2-26)
+
+### Minor Changes
+
+- use latest php-parser version: [`c6d20da`](https://github.com/glayzzle/php-transpiler/commit/c6d20da)
+- add retif node: [`fcb3ff8`](https://github.com/glayzzle/php-transpiler/commit/fcb3ff8)
+
+### Patches
+
+- fix name.name resolution on namespaces: [`ffd7f0d`](https://github.com/glayzzle/php-transpiler/commit/ffd7f0d)
+- release js: [`ee9f56c`](https://github.com/glayzzle/php-transpiler/commit/ee9f56c)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.1.0...v0.2.0)
+
 ## [Version 0.1.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.1.0) (2017-1-26)
 
 ### Major Changes
