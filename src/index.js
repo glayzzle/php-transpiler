@@ -5,6 +5,8 @@
  */
 'use strict';
 
+var Parser = require('php-parser');
+
 // Output AST manager
 var AST = require('./ast');
 // Parsing state object
@@ -33,7 +35,8 @@ var Visitors = {
   'pre': require('./visitor/pre'),
   'post': require('./visitor/post'),
   'retif': require('./visitor/retif'),
-  'include': require('./visitor/include')
+  'include': require('./visitor/include'),
+  'import': require('./visitor/import')
 };
 
 /**
@@ -52,6 +55,79 @@ var Transpiler = function (options) {
       this[k] = options;
     }
   }
+
+  // initialize the parser
+  this.parser = new Parser(this.parser || {});
+  this.parser.parser.extractDoc = true;
+  this.parser.ast.withPositions = true;
+  // inject lexing : import * as T_STRING from EXPR;
+
+  // DEFINE A NEW KEYWORD
+  this.parser.tokens.values['1000'] = 'T_IMPORT';
+  this.parser.tokens.names['T_IMPORT'] = 1000;
+  this.parser.lexer.keywords['import'] = 1000;
+  this.parser.tokens.values['1001'] = 'T_FROM';
+  this.parser.tokens.names['T_FROM'] = 1001;
+  this.parser.lexer.keywords['from'] = 1001;
+
+  // DEFINE THE AST NODE
+  var Statement = this.parser.ast.statement;
+  var KIND = 'import';
+  this.parser.ast.import = Statement.extends(function Import(what, where, location) {
+    Statement.apply(this, [KIND, location]);
+    this.what = what;
+    this.where = where;
+  });
+
+  // HANDLE THE IMPORT STATEMENT
+  var defaultStatement = this.parser.parser.read_statement;
+  this.parser.parser.read_statement = function() {
+    if (this.token === this.tok.T_IMPORT) {
+      var node = this.node('import'), what, where;
+      if (this.next().token === '*') {
+        this.next().expect(this.tok.T_AS) &&
+        this.next().expect(this.tok.T_STRING);
+        what = this.text();
+        this.next();
+      } else if (this.token === '{') {
+        what = this.read_list(this.tok.T_STRING, ',');
+        this.expect('}') && this.next();
+      } else if (this.token === this.tok.T_STRING) {
+        what = this.text();
+        if (this.next().token === this.tok.T_AS) {
+          this.next().expect(this.tok.T_STRING);
+          what = [
+            [what, this.text()]
+          ];
+          this.next();
+        } else {
+          what = [
+            [what, what]
+          ];
+        }
+      } else {
+        // parse error
+        this.expect(['{', '*', this.tok.T_STRING]);
+      }
+      this.expect(this.tok.T_FROM) && this.next();
+      where = this.read_expr();
+      this.expectEndOfStatement();
+      return node(what, where);
+    }
+    return defaultStatement.apply(this, arguments);
+  }.bind(this.parser.parser);
+  this.parser.ast.withPositions = true;
+};
+
+/**
+ * Reads a code string and returns its transpiled version
+ * @param {Object} ast
+ * @return {String}
+ */
+Transpiler.prototype.read = function (code, filename) {
+  return this.generate(
+    this.parser.parseCode(code, filename)
+  );
 };
 
 /**
@@ -63,6 +139,13 @@ var Transpiler = function (options) {
 Transpiler.prototype.generate = function (ast) {
   var output = new AST(this);
   var state = new State();
+  if (this.browser) {
+    state.registerGlobal('console');
+    state.registerGlobal('window');
+    state.registerGlobal('document');
+    state.registerGlobal('jQuery');
+    state.registerGlobal('angular');
+  }
   this.visit(ast, state, output);
   return output.toString('');
 };
@@ -113,6 +196,7 @@ AST.register('for', require('./ast/for'));
 AST.register('generic', require('./ast/generic'));
 AST.register('retif', require('./ast/retif'));
 AST.register('include', require('./ast/include'));
+AST.register('import', require('./ast/import'));
 
 // exports
 module.exports = Transpiler;
