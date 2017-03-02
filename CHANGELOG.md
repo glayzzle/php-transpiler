@@ -1,3 +1,28 @@
+## [Version 0.3.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.3.0) (2017-3-2)
+
+### Major Changes
+
+- implement the include node: [`5866050`](https://github.com/glayzzle/php-transpiler/commit/5866050)
+- implement import syntax & output: [`49d9cad`](https://github.com/glayzzle/php-transpiler/commit/49d9cad)
+- implement globals injection / native libraries: [`061bc6c`](https://github.com/glayzzle/php-transpiler/commit/061bc6c)
+
+### Minor Changes
+
+- update tests / use cases: [`48c5095`](https://github.com/glayzzle/php-transpiler/commit/48c5095)
+- use latest version: [`ec6cc68`](https://github.com/glayzzle/php-transpiler/commit/ec6cc68)
+- handle global variables from parser state: [`cb0e4bf`](https://github.com/glayzzle/php-transpiler/commit/cb0e4bf)
+- handle function resolution from objects & static classes: [`1dfb343`](https://github.com/glayzzle/php-transpiler/commit/1dfb343)
+
+### Patches
+
+- output variables on a single line: [`9f3e486`](https://github.com/glayzzle/php-transpiler/commit/9f3e486)
+- fix multiline comments: [`34efa1e`](https://github.com/glayzzle/php-transpiler/commit/34efa1e)
+- fix / add ; after a call statement: [`8bdae01`](https://github.com/glayzzle/php-transpiler/commit/8bdae01)
+- fix the  var declaration: [`43f0e7e`](https://github.com/glayzzle/php-transpiler/commit/43f0e7e)
+- declare result into scope variables: [`67ed1b5`](https://github.com/glayzzle/php-transpiler/commit/67ed1b5)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.2.0...v0.3.0)
+
 ## [Version 0.2.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.2.0) (2017-2-26)
 
 ### Minor Changes
