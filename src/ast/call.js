@@ -29,7 +29,7 @@ Call.prototype.toString = function (indent) {
   if (this._parent instanceof Statement) {
     return buffer;
   } else {
-    return indent + buffer + '\n';
+    return indent + buffer + ';\n';
   }
 };
 
