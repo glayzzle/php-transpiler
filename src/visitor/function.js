@@ -13,6 +13,7 @@ module.exports = function (node, state, output) {
   var prevFn = state.function;
   state.function = node.name;
   var scope = state.addScope(output.append('function', node));
+  scope.variable('$result');
   // introduce variables into the scope
   for(var i = 0; i < node.arguments.length; i++) {
     scope.variables[node.arguments[i].name] = {
