@@ -96,16 +96,19 @@ AST.prototype.prepend = function (name, options) {
  * Serialize the output
  */
 AST.prototype.variablesToString = function (indent) {
-  var buffer = '';
+  var buffer = [];
   if (this.scope && this.scope.variables) {
     for(var n in this.scope.variables) {
       if (this.scope.variables[n].from === 'scope') {
-        buffer += indent + 'var ' + n + ';\n';
+        buffer.push(n);
       }
     }
   }
   if (buffer.length > 0) {
-    buffer = '\n' + indent + '// variables into current scope\n' + buffer;
+    buffer = '\n'
+      + indent + '// variables into current scope\n'
+      + indent + 'var ' + buffer.join(', ') + ';\n'
+    ;
   }
   return buffer;
 };
