@@ -26,7 +26,15 @@ Doc.prototype.toString = function (indent) {
     }
     return indent + '/** ' + body + ' */\n';
   } else {
-    return indent + '// ' + this.node.lines.join('\n'+indent+'// ') + '\n';
+    var buffer = '';
+    this.node.lines.forEach(function(line) {
+      if (line.indexOf('\n') > -1) {
+        buffer += indent + '/* ' + line + ' */\n';
+      } else {
+        buffer += indent + '// ' + line + ' \n';
+      }
+    }.bind(this));
+    return buffer;
   }
 };
 
