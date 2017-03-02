@@ -6,6 +6,7 @@
 'use strict';
 
 var AST = require('../ast');
+var Statement = require('./statement');
 
 /**
  * @constructor AST/Function
@@ -140,7 +141,6 @@ fn.prototype.toString = function (indent) {
   var returnType = 'null';
   if (this.node.type) {
     returnType = '\''+this.node.type+'\'';
-    buffer += indent + 'var $result;\n';
     buffer += indent + 'do {\n';
     buffer += AST.prototype.toString.apply(this, [indent + '  ']);
     buffer += indent + '} while(false);\n';
