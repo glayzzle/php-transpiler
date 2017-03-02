@@ -23,12 +23,67 @@ var State = function () {
   this.scopes = [];
   this.functions = {};
   this.classes = {};
+  this.libraries = {};
+};
+
+var LIB_PREFIX = '$_';
+
+/**
+ * Inject globals
+ */
+State.prototype.registerGlobal = function(name) {
+  this.libraries[name] = name;
+};
+
+/**
+ * Inject a list of libraries
+ */
+State.prototype.setLibrary = function(name) {
+  if (typeof name === 'string') {
+    this.libraries[name] = LIB_PREFIX + name;
+  } else if (Array.isArray(name)) {
+    name.forEach(function(item) {
+      if (Array.isArray(item)) {
+        this.libraries[item[1]] = LIB_PREFIX + item[1];
+      } else {
+        this.libraries[item] = LIB_PREFIX + item;
+      }
+    }.bind(this));
+  } else {
+    for(var k in name) {
+      if (name.hasOwnProperty(k)) {
+        this.libraries[k] = LIB_PREFIX + k;
+      }
+    }
+  }
+  return this;
+};
+
+State.prototype.resolveLib = function (name) {
+  // check native JS libraries in order to avoid globals
+  var libName = name;
+  if (libName[0] === '?') {
+    libName = libName.substring(1);
+  }
+  if (libName[0] === '\\') {
+    libName = libName.substring(1);
+  }
+  if (this.namespace.length > 0) {
+    if (libName.substring(0, this.namespace.length) === this.namespace) {
+      libName = libName.substring(this.namespace.length + 1);
+    }
+  }
+  if(libName in this.libraries) {
+    return this.libraries[libName];
+  }
 };
 
 /**
  * Registers a function
  */
 State.prototype.getFunction = function (name) {
+  var lib = this.resolveLib(name);
+  if (lib) return lib;
   if (!(name in this.functions)) {
     var lookup = name[0] === '?';
     if (lookup) {
@@ -44,11 +99,32 @@ State.prototype.getFunction = function (name) {
 };
 
 /**
+ * Registers a function
+ */
+State.prototype.getClass = function (name) {
+  var lib = this.resolveLib(name);
+  if (lib) return lib;
+  if (!(name in this.classes)) {
+    var lookup = name[0] === '?';
+    if (lookup) {
+      name = name.substring(1);
+    }
+    this.classes[name] = {
+      name: name,
+      cb: '$cls_' + name.replace(/\\/g, '_'),
+      lookup: lookup
+    };
+  }
+  return this.classes[name].cb;
+};
+
+
+/**
  * Initialize a new scope
  * @return Scope
  */
 State.prototype.addScope = function (node) {
-  var scope = new Scope(node);
+  var scope = new Scope(this, node);
   this.scopes.push(scope);
   return scope;
 };
