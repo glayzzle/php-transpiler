@@ -22,6 +22,9 @@
     "url": "https://github.com/glayzzle/php-transpiler/issues"
   },
   "homepage": "https://github.com/glayzzle/php-transpiler#readme",
+  "dependencies": {
+    "php-parser": "^2.0.0-pre8"
+  },
   "devDependencies": {
     "coveralls": "^2.11.15",
     "grunt": "^1.0.1",
