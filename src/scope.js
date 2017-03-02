@@ -9,7 +9,8 @@
  * Current scope
  * @constructor Scope
  */
-var Scope = function (node) {
+var Scope = function (state, node) {
+  this.state = state;
   this.node = node;
   this.node.scope = this;
   this.variables = {};
@@ -19,6 +20,9 @@ var Scope = function (node) {
  * Sets a variable into the current scope
  */
 Scope.prototype.variable = function(name) {
+  if (name in this.state.libraries) {
+    return this;
+  }
   if (typeof name === 'string') {
     if (!(name in this.variables)) {
       this.variables[name] = {
