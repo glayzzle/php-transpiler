@@ -166,7 +166,7 @@ State.prototype.resolve = function (identifier, asClass) {
     // Unqualified name :
     // 1. search into imports
     if (identifier.name in this.uses) {
-      return this.uses[identifier.name].name;
+      return this.uses[identifier.name];
     }
     if (reservedTypes.indexOf(identifier.name) > -1) {
       return identifier.name;

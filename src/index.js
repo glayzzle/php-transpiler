@@ -36,7 +36,8 @@ var Visitors = {
   'post': require('./visitor/post'),
   'retif': require('./visitor/retif'),
   'include': require('./visitor/include'),
-  'import': require('./visitor/import')
+  'import': require('./visitor/import'),
+  'usegroup': require('./visitor/usegroup')
 };
 
 /**
