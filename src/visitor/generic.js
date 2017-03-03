@@ -11,7 +11,7 @@
 module.exports = function (node, state, output) {
   var properties = [];
   for(var k in node) {
-    if (Array.isArray(node[k]) || node[k].kind) {
+    if (node[k] && (Array.isArray(node[k]) || node[k].kind)) {
       properties.push(node[k]);
     }
   }
