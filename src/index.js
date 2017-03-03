@@ -37,7 +37,11 @@ var Visitors = {
   'retif': require('./visitor/retif'),
   'include': require('./visitor/include'),
   'import': require('./visitor/import'),
-  'usegroup': require('./visitor/usegroup')
+  'usegroup': require('./visitor/usegroup'),
+  'encapsed': require('./visitor/encapsed'),
+  'new': require('./visitor/new'),
+  'class': require('./visitor/class'),
+  'property': require('./visitor/generic')
 };
 
 /**
@@ -168,7 +172,7 @@ Transpiler.prototype.visit = function (node, state, output) {
     for(var i = 0; i < node.length; i++) {
       this.visit(node[i], state, output);
     }
-  } else {
+  } else if (node && node.kind) {
     var fn = node.kind in this.visitors ? this.visitors[node.kind] : Visitors[node.kind];
     if (typeof fn === 'function') {
       fn.apply(this, [node, state, output]);
@@ -198,6 +202,10 @@ AST.register('generic', require('./ast/generic'));
 AST.register('retif', require('./ast/retif'));
 AST.register('include', require('./ast/include'));
 AST.register('import', require('./ast/import'));
+AST.register('encapsed', require('./ast/encapsed'));
+AST.register('new', require('./ast/new'));
+AST.register('class', require('./ast/class'));
+AST.register('property', require('./ast/property'));
 
 // exports
 module.exports = Transpiler;
