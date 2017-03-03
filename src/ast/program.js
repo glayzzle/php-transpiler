@@ -44,6 +44,17 @@ Program.prototype.toString = function (indent) {
     buffer += indent + '// function imports\n' + fnBuffer;
   }
 
+  var clsBuffer = '';
+  for(var n in this.classes) {
+    var fn = this.classes[n];
+    clsBuffer += indent + 'var ' + fn.cb + ' = $php.context.class.callback('+this.string(fn.name)+', '+(
+      fn.lookup ? 'true': 'false'
+    )+', function(cb) { ' + fn.cb + ' = cb; });\n';
+  }
+  if (clsBuffer.length > 0) {
+    buffer += indent + '// classes imports\n' + clsBuffer;
+  }
+
   buffer += this.variablesToString(indent);
   buffer += AST.prototype.toString.apply(this, [indent]);
   if (isModule) {
