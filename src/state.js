@@ -19,6 +19,8 @@ var reservedTypes = [
  */
 var State = function () {
   this.namespace = '';
+  this.function = '';
+  this.class = '';
   this.uses = {};
   this.scopes = [];
   this.functions = {};
