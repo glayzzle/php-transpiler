@@ -1,3 +1,27 @@
+## [Version 0.4.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.4.0) (2017-3-3)
+
+### Major Changes
+
+- implement classes aliases with use statements: [`b0422d3`](https://github.com/glayzzle/php-transpiler/commit/b0422d3)
+- implement methods definition: [`2b88899`](https://github.com/glayzzle/php-transpiler/commit/2b88899)
+- register new nodes: [`ef974c8`](https://github.com/glayzzle/php-transpiler/commit/ef974c8)
+- implement new keyword: [`6ac7793`](https://github.com/glayzzle/php-transpiler/commit/6ac7793)
+- implement encapsed strings: [`9e9a2bd`](https://github.com/glayzzle/php-transpiler/commit/9e9a2bd)
+- implement class declaration: [`a85e1c3`](https://github.com/glayzzle/php-transpiler/commit/a85e1c3)
+- implement properties declaration: [`49055b2`](https://github.com/glayzzle/php-transpiler/commit/49055b2)
+
+### Minor Changes
+
+- flag current class of function: [`a8fdc3e`](https://github.com/glayzzle/php-transpiler/commit/a8fdc3e)
+- inject class lazyloaders into headers: [`7801513`](https://github.com/glayzzle/php-transpiler/commit/7801513)
+
+### Patches
+
+- improve tests: [`4023bb1`](https://github.com/glayzzle/php-transpiler/commit/4023bb1)
+- fix errors on null properties: [`5c7cd32`](https://github.com/glayzzle/php-transpiler/commit/5c7cd32)
+
+[...full changes](https://github.com/glayzzle/php-transpiler/compare/v0.3.0...v0.4.0)
+
 ## [Version 0.3.0](https://github.com/glayzzle/php-transpiler/releases/tag/v0.3.0) (2017-3-2)
 
 ### Major Changes
