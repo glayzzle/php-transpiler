@@ -5,4 +5,5 @@ namespace bench {
       fibo($a - 2) + fibo($a - 1)
     ;
   }
+  return 1 + 2 + 3;
 }

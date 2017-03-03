@@ -32,4 +32,9 @@ describe('init', function() {
     var contents = fs.readFileSync(PATH + filename).toString();
     console.log(translator.read(contents, filename));
   });
+  it('class.php', function() {
+    var filename = 'class.php';
+    var contents = fs.readFileSync(PATH + filename).toString();
+    console.log(translator.read(contents, filename));
+  });
 });
