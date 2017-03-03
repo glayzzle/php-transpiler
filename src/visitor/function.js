@@ -39,7 +39,7 @@ module.exports = function (node, state, output) {
   }
   // parse inner childs
   this.visit(
-    node.body.children,
+    node.body && node.body.children ? node.body.children : node.body,
     state,
     scope.node
   );

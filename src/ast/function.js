@@ -164,11 +164,26 @@ fn.prototype.toString = function (indent) {
     // global function
     var body = buffer;
     buffer = indent + '$php.context.function.declare(\n';
-    buffer += indent + '  \''+this.node.name+'\',\n';
+    buffer += indent + '  '+JSON.stringify(this.node.name)+',\n';
     buffer += indent + '  '+JSON.stringify(argsReflection)+',\n';
     buffer += indent + '  '+returnType+', ' + body + ');\n';
   } else if (this.node.kind === 'method') {
-    // @todo method declaration
+    var body = buffer;
+    buffer = indent + '.member(\n';
+    buffer += indent + '  '+JSON.stringify(this.node.name)+',\n';
+    buffer += indent + '  , ' + body + ')\n';
+    buffer += indent + '  .setArgs('+JSON.stringify(argsReflection)+')\n';
+    buffer += indent + '  .setReturnType('+returnType+')\n';
+    if (this.node.isAbstract) {
+      buffer += indent + '  .setAbstract()\n';
+    }
+    if (this.node.isFinal) {
+      buffer += indent + '  .setFinal()\n';
+    }
+    if (this.node.isStatic) {
+      buffer += indent + '  .setStatic()\n';
+    }
+    buffer += indent + '  .setVisibility('+JSON.stringify(this.node.visibility)+').done()\n';
   } else if (!(this._parent instanceof Statement)) {
     buffer = indent + buffer + ';\n';
   }
