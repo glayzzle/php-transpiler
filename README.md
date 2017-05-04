@@ -1,6 +1,10 @@
 # php-transpiler
 
-Transpiler API to convert [php-parser](https://github.com/glayzzle/php-parser) AST to Javascript
+Transpiler API to convert [php-parser](https://github.com/glayzzle/php-parser) AST to a Javascript output. This library is used to run a php script with :
+
+- [PHP Runtime](https://github.com/glayzzle/php-runtime) - the API compliant with PHP Transpiler output
+- [Glayzzle](https://github.com/glayzzle/glayzzle) - the nodejs CLI that runs PHP Files 
+
 
 
 [![npm version](https://badge.fury.io/js/php-transpiler.svg)](https://www.npmjs.com/package/php-transpiler)
