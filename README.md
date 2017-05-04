@@ -22,12 +22,12 @@ Usage
 
 ```js
 // initialize the php parser factory class
-var engine = require('php-parser');
 var transpiler = require('php-transpiler');
+var instance = new transpiler({
+  browser: true // says if we generate code for browser or nodejs
+});
 
-var jsCode = transpiler.generate(
-  engine.parseCode('<?php echo "Hello World";')
-);
+var jsCode = instance.read('<?php echo "Hello World";');
 console.log(jsCode);
 ```
 
